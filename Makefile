@@ -24,16 +24,21 @@ all:	$(NAME)
 $(BUILD):
 	@mkdir -p $@
 
-$(NAME):	$(BUILD) $(OBJ)
+Printf/libftprintf.a:
+	make bonus -C Printf
+
+$(NAME):	$(BUILD) $(OBJ) Printf/libftprintf.a
 	$(CC) $(OBJ) -o $@ -L./Printf -lftprintf
 
 $(BUILD)%.o:	$(SRC_DIR)%.c Makefile
 	$(CC) $(CFLAGS) -c $< -o $@ -I $(INCLUDES)
 
 clean:
+	make clean -C Printf
 	rm -rf $(BUILD)
 
 fclean:	clean
+	make fclean -C Printf
 	rm -rf $(NAME)
 
 re: fclean all
