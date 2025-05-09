@@ -139,6 +139,7 @@ int main(int ac, char **av)
 		stack[i].value = ft_atoi(av[i + 1]);
 		stack[i].next = stack + i + 1;
 		stack[i].prev = stack + i - 1;
+		stack[i].lis = false;
 		tmp[i] = stack + i;
 		i++;
 	}
@@ -165,6 +166,7 @@ int main(int ac, char **av)
 		curr++;
 	}
 	lis(head, ac - 1);
+	free(tmp);
 	t_stack *b = NULL;
 	void	*end = stack;
 	curr = 0;
