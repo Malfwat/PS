@@ -8,8 +8,8 @@ CC	=	cc
 CFLAGS	=	-Wall -Wextra -Werror -MMD -g3
 
 INCLUDES	=	includes/
-INCLUDES	+=	-I./Printf/libft/
-INCLUDES	+=	-I./Printf/includes/
+INCLUDES	+=	-I./printf/libft/
+INCLUDES	+=	-I./printf/includes/
 
 SRC_DIR	=	srcs/
 
@@ -24,21 +24,21 @@ all:	$(NAME)
 $(BUILD):
 	@mkdir -p $@
 
-Printf/libftprintf.a:
-	make bonus -C Printf
+printf/libftprintf.a:
+	make bonus -C printf
 
-$(NAME):	$(BUILD) $(OBJ) Printf/libftprintf.a
-	$(CC) $(OBJ) -o $@ -L./Printf -lftprintf
+$(NAME):	$(BUILD) $(OBJ) printf/libftprintf.a
+	$(CC) $(OBJ) -o $@ -L./printf -lftprintf
 
 $(BUILD)%.o:	$(SRC_DIR)%.c Makefile
 	$(CC) $(CFLAGS) -c $< -o $@ -I $(INCLUDES)
 
 clean:
-	make clean -C Printf
+	make clean -C printf
 	rm -rf $(BUILD)
 
 fclean:	clean
-	make fclean -C Printf
+	make fclean -C printf
 	rm -rf $(NAME)
 
 re: fclean all

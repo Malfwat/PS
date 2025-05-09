@@ -113,6 +113,7 @@ void	lis(t_stack *tab, int size)
 		k = prev[k];
 		i--;
 	}
+	ft_printf("\n");
 }
 
 int main(int ac, char **av)
@@ -161,26 +162,21 @@ int main(int ac, char **av)
 	{
 
 		tmp[curr]->value_sorted = curr;
-		ft_printf("%i, place %i \t%i\n", tmp[curr]->value, tmp[curr]->value_sorted, stack[curr].value);
 		curr++;
 	}
-	ft_printf("Paaaaauuuuuse2\n");
 	lis(head, ac - 1);
-	s_stack(&stack, stack_a);
-	while (curr--)
-	{
-		ft_printf("%i\n", stack->value);
-		stack = stack->next;
-	}
-	
 	t_stack *b = NULL;
-
+	void	*end = stack;
 	curr = 0;
-	p_stack(&stack, &b, stack_b);
-	while (curr++ < ac - 1 && stack)
+	while (!curr++ || stack != end)
 	{
-		ft_printf("%i\n", stack->value);
-		stack = stack->next;
+		if (!stack->lis)
+			p_stack(&stack, &b, stack_b);
+		else
+		{
+			ft_printf("%i\n", stack->value);
+			stack = stack->next;
+		}
 	}
 	free(garbage);
 	return (0);
