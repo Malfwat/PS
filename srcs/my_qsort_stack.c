@@ -12,8 +12,8 @@ void	stack_swap(t_stack **a, t_stack **b)
 
 int	partitionning(t_stack **arr, int left, int right)
 {
-	int i;
-	int	j;
+	int		i;
+	int		j;
 	t_stack	*pivot;
 
 	i = left - 1;
@@ -39,7 +39,6 @@ void	my_qsort(t_stack **arr, int left, int right)
 	if (left < right)
 	{
 		pi = partitionning(arr, left, right);
-
 		my_qsort(arr, left, pi - 1);
 		my_qsort(arr, pi + 1, right);
 	}

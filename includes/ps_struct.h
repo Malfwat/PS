@@ -1,6 +1,7 @@
 #ifndef PS_STRUCT_H
+# define PS_STRUCT_H
 
-#include <stdbool.h>
+# include <stdbool.h>
 
 typedef struct s_stack
 {
