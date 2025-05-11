@@ -17,7 +17,14 @@ typedef struct s_stack
 enum e_stack
 {
 	stack_a,
-	stack_b
+	stack_b,
+	both
+};
+
+enum e_push
+{
+	push_to_a,
+	push_to_b
 };
 
 enum e_tab

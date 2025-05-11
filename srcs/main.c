@@ -17,30 +17,44 @@ void	swap(t_stack *a, t_stack *b, t_stack **head)
 	a->prev = b;
 }
 
-void	s_stack(t_stack **a, enum e_stack stack)
+void	s_stack(t_stack **one, t_stack **two, enum e_stack stack)
 {
 	t_stack		*next;
-	static char	*move[2] = {"sa", "sb"};
+	static char	*move[3] = {"sa\n", "sb\n", "ss\n"};
 
-	next = (*a)->next;
-	swap(*a, next, a);
-	ft_putendl_fd(move[stack], 1);
+	if (stack != stack_b && one && *one)
+	{
+		next = (*one)->next;
+		swap(*one, next, one);
+	}
+	if (stack != stack_a && two && *two)
+	{
+		next = (*two)->next;
+		swap(*two, next, two);
+	}
+	ft_putstr_fd(move[stack], 1);
 }
 
-void	rotate(t_stack **head, enum e_stack stack)
+void	rotate(t_stack **one, t_stack **two, enum e_stack stack)
 {
-	static char	*move[2] = {"ra", "rb"};
+	static char	*move[3] = {"ra\n", "rb\n", "rr\n"};
 
-	*head = (*head)->next;
-	ft_putendl_fd(move[stack], 1);
+	if (stack != stack_b && one && *one)
+		*one = (*one)->next;
+	if (stack != stack_a && two && *two)
+		*two = (*two)->next;
+	ft_putstr_fd(move[stack], 1);
 }
 
-void	rrotate(t_stack **head, enum e_stack stack)
+void	rrotate(t_stack **one, t_stack **two, enum e_stack stack)
 {
-	static char	*move[2] = {"rra", "rrb"};
+	static char	*move[3] = {"rra\n", "rrb\n", "rrr\n"};
 
-	*head = (*head)->prev;
-	ft_putendl_fd(move[stack], 1);
+	if (stack != stack_b && one && *one)
+		*one = (*one)->prev;
+	if (stack != stack_a && two && *two)
+		*two = (*two)->prev;
+	ft_putstr_fd(move[stack], 1);
 }
 
 t_stack	*pop(t_stack **head)
@@ -49,6 +63,8 @@ t_stack	*pop(t_stack **head)
 	t_stack	*prev;
 	t_stack	*next;
 
+	if (!head || !*head)
+		return (NULL);
 	prev = (*head)->prev;
 	next = (*head)->next;
 	tmp = *head;
@@ -79,12 +95,14 @@ void	push(t_stack **head, t_stack *node)
 	*head = node;
 }
 
-void	p_stack(t_stack **from, t_stack **to, enum e_stack stack)
+void	p_stack(t_stack **from, t_stack **to, enum e_push direction)
 {
+	static char *move[2] = {"pa\n", "pb\n"};
+
 	if (!*from)
 		return ;
 	push(to, pop(from));
-	ft_putendl_fd((char *[]){"pa", "pb"}[stack], 1);
+	ft_putstr_fd(move[direction], 1);
 }
 
 int	binary_search(t_stack *tab, int *tail, int length, int key)
@@ -192,9 +210,9 @@ void	init_stack_b(t_stack *stacks[2], int size)
 	while (stacks[stack_a] != end || !curr++)
 	{
 		if (!stacks[stack_a]->lis)
-			p_stack(stacks, stacks + 1, stack_b);
+			p_stack(stacks, stacks + 1, push_to_b);
 		else
-			stacks[stack_a] = stacks[stack_a]->next;
+			rotate(stacks, stacks + stack_b, stack_a);
 	}
 }
 

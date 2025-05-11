@@ -1,4 +1,4 @@
-NAME	=	ps
+NAME	=	push_swap
 
 SRC	=	main.c	\
 		my_qsort_stack.c
