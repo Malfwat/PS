@@ -117,23 +117,6 @@ t_stack	*init_stack_a(int ac, char **av)
 	return (free(tmp), stack);
 }
 
-void	init_stack_b(t_stack *stacks[2], int size)
-{
-	void	*end;
-	int		curr;
-
-	lis(stacks[stack_a], size);
-	stacks[stack_b] = NULL;
-	end = stacks[stack_a];
-	curr = 0;
-	while (stacks[stack_a] != end || !curr++)
-	{
-		if (!stacks[stack_a]->lis)
-			p_stack(stacks, stacks + 1, push_to_b);
-		else
-			rotate(stacks, stacks + stack_b, stack_a);
-	}
-}
 
 unsigned int	stack_size(t_stack *head)
 {
@@ -279,6 +262,38 @@ void	find_best_pair(t_stack *stacks[2])
 }
 
 void	print_stacks_side_by_side(t_stack *a, t_stack *b);
+
+bool	is_all_lis(t_stack *head)
+{
+	int		go;
+	void	*end;
+
+	go = 1;
+	end = head;
+	while (head != end || go--)
+	{
+		if (!head->lis)
+			return (false);
+		head = head->next;
+	}
+	return (true);
+}
+
+void	init_stack_b(t_stack *stacks[2], int size)
+{
+	t_stack		*it;
+	t_target	best;
+	t_target	tmp;
+
+	best.direction = 0;
+	it = stacks[stack_a];
+	while (it != stacks[stack_a])
+	{
+
+		tmp = 
+		it = it->next;
+	}
+}
 
 int	main(int ac, char **av)
 {
