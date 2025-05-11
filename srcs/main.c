@@ -1,109 +1,6 @@
 #include "libftprintf.h"
 #include "ps_struct.h"
-
-void	swap(t_stack *a, t_stack *b, t_stack **head)
-{
-	t_stack	*prev;
-	t_stack	*next;
-
-	if (a == *head)
-		*head = b;
-	next = b->next;
-	prev = a->prev;
-	a->prev->next = b;
-	b->next = a;
-	b->prev = prev;
-	a->next = next;
-	a->prev = b;
-}
-
-void	s_stack(t_stack **one, t_stack **two, enum e_stack stack)
-{
-	t_stack		*next;
-	static char	*move[3] = {"sa\n", "sb\n", "ss\n"};
-
-	if (stack != stack_b && one && *one)
-	{
-		next = (*one)->next;
-		swap(*one, next, one);
-	}
-	if (stack != stack_a && two && *two)
-	{
-		next = (*two)->next;
-		swap(*two, next, two);
-	}
-	ft_putstr_fd(move[stack], 1);
-}
-
-void	rotate(t_stack **one, t_stack **two, enum e_stack stack)
-{
-	static char	*move[3] = {"ra\n", "rb\n", "rr\n"};
-
-	if (stack != stack_b && one && *one)
-		*one = (*one)->next;
-	if (stack != stack_a && two && *two)
-		*two = (*two)->next;
-	ft_putstr_fd(move[stack], 1);
-}
-
-void	rrotate(t_stack **one, t_stack **two, enum e_stack stack)
-{
-	static char	*move[3] = {"rra\n", "rrb\n", "rrr\n"};
-
-	if (stack != stack_b && one && *one)
-		*one = (*one)->prev;
-	if (stack != stack_a && two && *two)
-		*two = (*two)->prev;
-	ft_putstr_fd(move[stack], 1);
-}
-
-t_stack	*pop(t_stack **head)
-{
-	t_stack	*tmp;
-	t_stack	*prev;
-	t_stack	*next;
-
-	if (!head || !*head)
-		return (NULL);
-	prev = (*head)->prev;
-	next = (*head)->next;
-	tmp = *head;
-	if (tmp->next == tmp)
-		*head = NULL;
-	else
-	{
-		(*head) = next;
-		next->prev = prev;
-		prev->next = next;
-	}
-	return (tmp);
-}
-
-void	push(t_stack **head, t_stack *node)
-{
-	if (!*head)
-	{
-		*head = node;
-		node->next = node;
-		node->prev = node;
-		return ;
-	}
-	node->next = *head;
-	node->prev = (*head)->prev;
-	(*head)->prev = node;
-	node->prev->next = node;
-	*head = node;
-}
-
-void	p_stack(t_stack **from, t_stack **to, enum e_push direction)
-{
-	static char *move[2] = {"pa\n", "pb\n"};
-
-	if (!*from)
-		return ;
-	push(to, pop(from));
-	ft_putstr_fd(move[direction], 1);
-}
+#include "ps.h"
 
 int	binary_search(t_stack *tab, int *tail, int length, int key)
 {
@@ -165,13 +62,34 @@ void	lis(t_stack *tab, int size)
 	}
 }
 
-void	fill_data(t_stack **arr, t_stack *stack, char **av, int i)
+int	ft_isnumber(char *str)
 {
+	int	i;
+
+	i = 0;
+	if (!str)
+		return (false);
+	if (str[i] == '-' || str[i] == '+')
+		i++;
+	while (str[i])
+	{
+		if (str[i] > '9' || str[i] < '0')
+			return (false);
+		i++;
+	}
+	return (true);
+}
+
+bool	fill_data(t_stack **arr, t_stack *stack, char **av, int i)
+{
+	if (!ft_isnumber(av[i + 1]))
+		return (false);
 	stack[i].value = ft_atoi(av[i + 1]);
 	stack[i].next = stack + i + 1;
 	stack[i].prev = stack + i - 1;
 	stack[i].lis = false;
 	arr[i] = stack + i;
+	return (true);
 }
 
 t_stack	*init_stack_a(int ac, char **av)
@@ -188,7 +106,8 @@ t_stack	*init_stack_a(int ac, char **av)
 		return (free(stack), NULL);
 	i = 0;
 	while (i < ac - 1)
-		fill_data(tmp, stack, av, i++);
+		if (!fill_data(tmp, stack, av, i++))
+			return (free(stack), free(tmp), NULL);
 	stack[i - 1].next = stack;
 	stack[0].prev = stack + i - 1;
 	my_qsort(tmp, 0, ac - 2);
@@ -216,12 +135,33 @@ void	init_stack_b(t_stack *stacks[2], int size)
 	}
 }
 
+unsigned int	stack_size(t_stack *head)
+{
+	unsigned int	len;
+	void			*end;
+
+	len = 0;
+	if (!head)
+		return (0);
+	end = head;
+	while (head != end || !len++)
+		head = head->next;
+	return (len);
+}
+
+t_target	get_cost(t_stack *stack, unsigned int index)
+{
+
+}
+
 int	main(int ac, char **av)
 {
 	t_stack	*stacks[2];
 	void	*garbage;
 
 	stacks[stack_a] = init_stack_a(ac, av);
+	if (!stacks[stack_a])
+		return (ft_putendl_fd("Something wrong with your input", 2), 1);
 	garbage = *stacks;
 	init_stack_b(stacks, ac - 1);
 	free(garbage);

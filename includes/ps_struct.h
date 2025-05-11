@@ -3,16 +3,7 @@
 
 # include <stdbool.h>
 
-# define MAX_LIS 4096
-
-typedef struct s_stack
-{
-	int				value;
-	unsigned int	index;
-	bool			lis;
-	struct s_stack	*next;
-	struct s_stack	*prev;
-}	t_stack;
+# define MAX_LIS 2048
 
 enum e_stack
 {
@@ -33,6 +24,26 @@ enum e_tab
 	tails
 };
 
-void	my_qsort(t_stack **arr, int left, int right);
+enum e_forward
+{
+	up,
+	down
+};
+
+typedef struct s_stack
+{
+	int				value;
+	unsigned int	index;
+	bool			lis;
+	struct s_stack	*next;
+	struct s_stack	*prev;
+}	t_stack;
+
+typedef struct s_target
+{
+	t_stack			*node;
+	unsigned int	cost;
+	enum e_forward	direction;
+}t_target;
 
 #endif // PS_STRUCT_H
