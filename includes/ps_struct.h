@@ -42,7 +42,8 @@ typedef struct s_stack
 typedef struct s_target
 {
 	t_stack			*node;
-	unsigned int	cost;
+	unsigned int	cost_up;
+	unsigned int	cost_down;
 	enum e_forward	direction;
 }t_target;
 

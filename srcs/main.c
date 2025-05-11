@@ -144,14 +144,70 @@ unsigned int	stack_size(t_stack *head)
 	if (!head)
 		return (0);
 	end = head;
-	while (head != end || !len++)
+	while (head != end || !len)
+	{
 		head = head->next;
+		len++;
+	}
 	return (len);
 }
 
-t_target	get_cost(t_stack *stack, unsigned int index)
+unsigned int	get_position(t_stack *head, t_stack *node)
 {
+	unsigned int	pos;
 
+	pos = 0;
+	while (head != node)
+	{
+		pos++;
+		head = head->next;
+	}
+	return (pos);
+}
+
+t_stack	*smallest_bigger(t_stack *stack, unsigned int index)
+{
+	int	go;
+	t_stack	*node;
+	void	*end;
+
+	go = 1;
+	end = stack;
+	node = NULL;
+	while (stack != end || go--)
+	{
+		if (stack->index > index && (!node || stack->index < node->index))
+			node = stack;
+		stack = stack->next;
+	}
+	if (node)
+		return (node);
+	go = 1;
+	while (stack != end || go--)
+	{
+		if (!node || node->index > stack->index)
+			node = stack;
+		stack = stack->next;
+	}
+	return (node);
+}
+
+t_target	get_cost(t_stack *stack, t_stack *node)
+{
+	unsigned int	size;
+	unsigned int	pos;
+	t_target		target;
+
+	size = stack_size(stack);
+	pos = get_position(stack, node);
+	target.node = node;
+	if (pos < size - pos)
+		target.direction = up;
+	else
+		target.direction = down;
+	target.cost_down = size - pos;
+	target.cost_up = pos;
+	return (target);
 }
 
 int	main(int ac, char **av)
@@ -164,6 +220,9 @@ int	main(int ac, char **av)
 		return (ft_putendl_fd("Something wrong with your input", 2), 1);
 	garbage = *stacks;
 	init_stack_b(stacks, ac - 1);
+
+	t_target	target = get_cost(stacks[stack_b], stacks[stack_b]->next->next);
+	ft_printf("value: %i\tcost_up: %u\tcost_down: %u\tdirection: %s\n", target.node->value, target.cost_up, target.cost_down, (char *[]){"up", "down"}[target.direction]);
 	free(garbage);
 	return (0);
 }
