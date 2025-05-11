@@ -8,7 +8,7 @@
 typedef struct s_stack
 {
 	int				value;
-	unsigned int	value_sorted;
+	unsigned int	index;
 	bool			lis;
 	struct s_stack	*next;
 	struct s_stack	*prev;

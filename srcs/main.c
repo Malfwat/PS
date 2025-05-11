@@ -98,7 +98,7 @@ int	binary_search(t_stack *tab, int *tail, int length, int key)
 	while (low <= high)
 	{
 		mid = (low + high) / 2;
-		if ((int)tab[tail[mid]].value_sorted < key)
+		if ((int)tab[tail[mid]].index < key)
 			low = mid + 1;
 		else
 			high = mid - 1;
@@ -125,25 +125,25 @@ void	lis(t_stack *tab, int size)
 	int	i;
 	int	len;
 	int	pos;
-	int	k;
+	int	lis_index;
 
 	initialize_tabs(arr, MAX_LIS);
 	len = 0;
 	i = -1;
 	while (++i < size)
 	{
-		pos = binary_search(tab, arr[tails], len, tab[i].value_sorted);
+		pos = binary_search(tab, arr[tails], len, tab[i].index);
 		arr[tails][pos] = i;
 		if (pos > 0)
 			arr[previous][i] = arr[tails][pos - 1];
 		if (pos == len)
 			len++;
 	}
-	k = arr[tails][len - 1];
+	lis_index = arr[tails][len - 1];
 	while (len-- > 0)
 	{
-		tab[k].lis = true;
-		k = arr[previous][k];
+		tab[lis_index].lis = true;
+		lis_index = arr[previous][lis_index];
 	}
 }
 
@@ -176,7 +176,7 @@ t_stack	*init_stack_a(int ac, char **av)
 	my_qsort(tmp, 0, ac - 2);
 	i = -1;
 	while (++i < ac - 1)
-		tmp[i]->value_sorted = i;
+		tmp[i]->index = i;
 	return (free(tmp), stack);
 }
 

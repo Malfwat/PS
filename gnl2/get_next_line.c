@@ -112,9 +112,8 @@ char	*get_line(char **stash, int fd)
 	else if (stash[fd] && stash[fd][0] && ++lst_size)
 		add_back(&head, stash[fd]);
 	nb_r = read(fd, stash[fd], BUFFER_SIZE);
-	if (nb_r < 0)	
+	if (nb_r < 0)
 		return (free(stash[fd]), free_lst(head), NULL);
-	// printf("Je suis %i\n", fd);
 	while (nb_r)
 	{
 		stash[fd][nb_r] = 0;
