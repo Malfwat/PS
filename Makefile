@@ -2,6 +2,7 @@ NAME	=	push_swap
 
 SRC	=	main.c	\
 		push.c	\
+		print.c	\
 		swap.c	\
 		rotate.c	\
 		my_qsort_stack.c

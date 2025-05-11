@@ -4,6 +4,9 @@
 # include <stdbool.h>
 
 # define MAX_LIS 2048
+# define UP 1
+# define DOWN 2
+# define SEPARATE 3
 
 enum e_stack
 {
@@ -46,5 +49,7 @@ typedef struct s_target
 	unsigned int	cost_down;
 	enum e_forward	direction;
 }t_target;
+
+typedef t_target t_pair[2];
 
 #endif // PS_STRUCT_H

@@ -210,19 +210,98 @@ t_target	get_cost(t_stack *stack, t_stack *node)
 	return (target);
 }
 
+bool  is_sorted(t_stack *stack)
+{
+	unsigned int	tmp;
+	void			*end;
+
+	end = stack;
+	tmp = 0;
+	while (stack != end || !tmp)
+	{
+		if (stack->index < tmp)
+			return (false);
+		tmp = stack->index;
+		stack = stack->next;
+	}
+	return (true);
+}
+
+void	get_pair(t_stack *stacks[2], t_stack *node, t_pair pair)
+{
+	void	*mate;
+
+	mate = smallest_bigger(stacks[stack_a], node->index);
+	pair[stack_b] = get_cost(stacks[stack_b], node);
+	pair[stack_a] = get_cost(stacks[stack_a], mate);
+}
+
+unsigned int	biggest_cost(unsigned int a, unsigned int b)
+{
+	if (a > b)
+		return (a);
+	return (b);
+}
+
+unsigned int min_cost(t_target target)
+{
+	if (target.direction == up)
+		return (target.cost_up);
+	return (target.cost_down);
+}
+
+unsigned int pair_cost(t_pair pair, u_int8_t *final_direction)
+{
+	unsigned int	cost;
+	unsigned int	tmp;
+
+	tmp = biggest_cost(pair[stack_a].cost_up, pair[stack_b].cost_up);
+	cost = tmp;
+	*final_direction = UP;
+	tmp = biggest_cost(pair[stack_a].cost_down, pair[stack_b].cost_down);
+	if (cost > tmp)
+	{
+		cost = tmp;
+		*final_direction = DOWN;
+	}
+	tmp = min_cost(pair[stack_a]) + min_cost(pair[stack_b]);
+	if (cost > tmp)
+	{
+		cost = tmp;
+		*final_direction = SEPARATE;
+	}
+	return (cost + 1);
+}
+
+void	find_best_pair(t_stack *stacks[2])
+{
+	(void)stacks;	
+}
+
+void	print_stacks_side_by_side(t_stack *a, t_stack *b);
+
 int	main(int ac, char **av)
 {
 	t_stack	*stacks[2];
 	void	*garbage;
 
+	if (ac < 2)
+		return (ft_putendl_fd("Gimme some number", 2), 1);
 	stacks[stack_a] = init_stack_a(ac, av);
+	if (is_sorted(stacks[stack_a]))
+		return (ft_putendl_fd("Already sorted", 1), free(*stacks), 0);
 	if (!stacks[stack_a])
 		return (ft_putendl_fd("Something wrong with your input", 2), 1);
 	garbage = *stacks;
 	init_stack_b(stacks, ac - 1);
 
-	t_target	target = get_cost(stacks[stack_b], stacks[stack_b]->next->next);
-	ft_printf("value: %i\tcost_up: %u\tcost_down: %u\tdirection: %s\n", target.node->value, target.cost_up, target.cost_down, (char *[]){"up", "down"}[target.direction]);
+	t_pair	pair;
+	u_int8_t dir;
+	get_pair(stacks, stacks[stack_b], pair);
+	
+//	ft_printf("value: %i\tcost_up: %u\tcost_down: %u\tdirection: %s\n", target.node->value, target.cost_up, target.cost_down, (char *[]){"up", "down"}[target.direction]);
+	ft_printf("%i est lie a %i et ils coutent %u\n", pair[stack_b].node->value, pair[stack_a].node->value, pair_cost(pair, &dir));
+	print_stacks_side_by_side(stacks[stack_a], stacks[stack_b]);
 	free(garbage);
 	return (0);
 }
