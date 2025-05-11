@@ -106,47 +106,44 @@ int	binary_search(t_stack *tab, int *tail, int length, int key)
 	return (low);
 }
 
-void	initialize_tabs(int *prev, int *tail, int size)
+void	initialize_tabs(int arr[2][MAX_LIS], int size)
 {
 	int	i;
 
 	i = 0;
 	while (i < size)
 	{
-		prev[i] = -1;
-		tail[i] = 0;
+		arr[previous][i] = -1;
+		arr[tails][i] = 0;
 		i++;
 	}
 }
 
 void	lis(t_stack *tab, int size)
 {
-	int	prev[4096];
-	int	tail[4096];
+	int	arr[2][MAX_LIS];
 	int	i;
 	int	len;
 	int	pos;
 	int	k;
 
-	initialize_tabs(prev, tail, 4096);
+	initialize_tabs(arr, MAX_LIS);
 	len = 0;
 	i = -1;
 	while (++i < size)
 	{
-		pos = binary_search(tab, tail, len, tab[i].value_sorted);
-		tail[pos] = i;
+		pos = binary_search(tab, arr[tails], len, tab[i].value_sorted);
+		arr[tails][pos] = i;
 		if (pos > 0)
-			prev[i] = tail[pos - 1];
+			arr[previous][i] = arr[tails][pos - 1];
 		if (pos == len)
 			len++;
 	}
-	k = tail[len - 1];
-	i = len - 1;
-	while (i >= 0)
+	k = arr[tails][len - 1];
+	while (len-- > 0)
 	{
 		tab[k].lis = true;
-		k = prev[k];
-		i--;
+		k = arr[previous][k];
 	}
 }
 

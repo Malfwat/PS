@@ -3,6 +3,8 @@
 
 # include <stdbool.h>
 
+# define MAX_LIS 4096
+
 typedef struct s_stack
 {
 	int				value;
@@ -16,6 +18,12 @@ enum e_stack
 {
 	stack_a,
 	stack_b
+};
+
+enum e_tab
+{
+	previous,
+	tails
 };
 
 void	my_qsort(t_stack **arr, int left, int right);
