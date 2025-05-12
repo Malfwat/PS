@@ -114,6 +114,7 @@ t_stack	*init_stack_a(int ac, char **av)
 	i = -1;
 	while (++i < ac - 1)
 		tmp[i]->index = i;
+	lis(stack, ac - 1);
 	return (free(tmp), stack);
 }
 
@@ -279,20 +280,44 @@ bool	is_all_lis(t_stack *head)
 	return (true);
 }
 
+//	find best to b
+//	put to top
+//	pb
+
 void	init_stack_b(t_stack *stacks[2], int size)
 {
-	t_stack		*it;
-	t_target	best;
-	t_target	tmp;
+	u_int8_t	dir;
+	int			i;
 
-	best.direction = 0;
-	it = stacks[stack_a];
-	while (it != stacks[stack_a])
+	i = 0;
+	while (i < size)
+	{
+		if (stacks[stack_a][i].lis == 0)
+		{
+			dir = UP;
+			break ;
+		}
+		else if (stacks[stack_a][size - i - 1].lis == 0)
+		{
+			dir = DOWN;
+			break ;
+		}
+		i++;
+	}
+	while (i-- >= 0)
+	{
+		if (dir == UP)
+			rotate(stacks, stacks + 1, stack_a);
+		else if (dir == DOWN)
+			rrotate(stacks, stacks + 1, stack_a);
+	}
+	p_stack(stacks, stacks + 1, push_to_b);
+/*	while (!is_all_lis(stacks[stack_a])
 	{
 
 		tmp = 
 		it = it->next;
-	}
+	}*/
 }
 
 int	main(int ac, char **av)
