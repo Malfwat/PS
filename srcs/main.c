@@ -211,11 +211,11 @@ bool  is_sorted(t_stack *stack)
 	return (true);
 }
 
-void	get_pair(t_stack *stacks[2], t_stack *node, t_pair pair)
+void	get_pair(t_stack *stacks[2], t_stack *node, t_pair pair, t_stack *(*find)(t_stack *, unsigned int))
 {
 	void	*mate;
 
-	mate = smallest_bigger(stacks[stack_a], node->index);
+	mate = find(stacks[stack_a], node->index);
 	pair[stack_b] = get_cost(stacks[stack_b], node);
 	pair[stack_a] = get_cost(stacks[stack_a], mate);
 }
@@ -259,7 +259,7 @@ unsigned int pair_cost(t_pair pair, u_int8_t *final_direction)
 
 void	find_best_pair(t_stack *stacks[2])
 {
-	(void)stacks;	
+	(void)stacks;
 }
 
 void	print_stacks_side_by_side(t_stack *a, t_stack *b);
@@ -284,7 +284,7 @@ bool	is_all_lis(t_stack *head)
 //	put to top
 //	pb
 
-void	init_stack_b(t_stack *stacks[2], int size)
+void	put_first_elem(t_stack *stacks[2], int size)
 {
 	u_int8_t	dir;
 	int			i;
@@ -312,7 +312,20 @@ void	init_stack_b(t_stack *stacks[2], int size)
 			rrotate(stacks, stacks + 1, stack_a);
 	}
 	p_stack(stacks, stacks + 1, push_to_b);
-/*	while (!is_all_lis(stacks[stack_a])
+}
+/*
+t_pair	get_best_pair(t_stack *from, t_stack *to, 
+					 bool (*is_pushable)(t_stack *), 
+					 t_stack *(*find)(t_stack *, unsigned int))
+{
+
+}*/
+
+void	init_stack_b(t_stack *stacks[2], int size)
+{
+	put_first_elem(stacks, size);
+	/*
+	while (!is_all_lis(stacks[stack_a])
 	{
 
 		tmp = 
@@ -337,7 +350,7 @@ int	main(int ac, char **av)
 
 	t_pair	pair;
 	u_int8_t dir;
-	get_pair(stacks, stacks[stack_b], pair);
+	get_pair(stacks, stacks[stack_b], pair, smallest_bigger);
 	
 //	ft_printf("value: %i\tcost_up: %u\tcost_down: %u\tdirection: %s\n", target.node->value, target.cost_up, target.cost_down, (char *[]){"up", "down"}[target.direction]);
 	ft_printf("%i est lie a %i et ils coutent %u\n", pair[stack_b].node->value, pair[stack_a].node->value, pair_cost(pair, &dir));
