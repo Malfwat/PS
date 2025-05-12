@@ -211,13 +211,22 @@ bool  is_sorted(t_stack *stack)
 	return (true);
 }
 
-void	get_pair(t_stack *stacks[2], t_stack *node, t_pair pair, t_stack *(*find)(t_stack *, unsigned int))
+t_pair	get_pair(t_stack *stacks[2], t_stack *node, t_stack *(*find)(t_stack *, unsigned int), bool from)
 {
 	void	*mate;
+	t_pair	pair;
 
-	mate = find(stacks[stack_a], node->index);
-	pair[stack_b] = get_cost(stacks[stack_b], node);
-	pair[stack_a] = get_cost(stacks[stack_a], mate);
+	if (from == FROM_B)
+	{
+		mate = find(stacks[stack_a], node->index);
+		pair.stack_b = get_cost(stacks[stack_b], node);
+		pair.stack_a = get_cost(stacks[stack_a], mate);
+		return (pair);
+	}
+	mate = find(stacks[stack_b], node->index);
+	pair.stack_b = get_cost(stacks[stack_b], mate);
+	pair.stack_a = get_cost(stacks[stack_a], node);
+	return (pair);
 }
 
 unsigned int	biggest_cost(unsigned int a, unsigned int b)
@@ -239,16 +248,16 @@ unsigned int pair_cost(t_pair pair, u_int8_t *final_direction)
 	unsigned int	cost;
 	unsigned int	tmp;
 
-	tmp = biggest_cost(pair[stack_a].cost_up, pair[stack_b].cost_up);
+	tmp = biggest_cost(pair.stack_a.cost_up, pair.stack_b.cost_up);
 	cost = tmp;
 	*final_direction = UP;
-	tmp = biggest_cost(pair[stack_a].cost_down, pair[stack_b].cost_down);
+	tmp = biggest_cost(pair.stack_a.cost_down, pair.stack_b.cost_down);
 	if (cost > tmp)
 	{
 		cost = tmp;
 		*final_direction = DOWN;
 	}
-	tmp = min_cost(pair[stack_a]) + min_cost(pair[stack_b]);
+	tmp = min_cost(pair.stack_a) + min_cost(pair.stack_b);
 	if (cost > tmp)
 	{
 		cost = tmp;
@@ -313,14 +322,43 @@ void	put_first_elem(t_stack *stacks[2], int size)
 	}
 	p_stack(stacks, stacks + 1, push_to_b);
 }
-/*
-t_pair	get_best_pair(t_stack *from, t_stack *to, 
-					 bool (*is_pushable)(t_stack *), 
-					 t_stack *(*find)(t_stack *, unsigned int))
+
+bool	is_lis(t_stack *node)
 {
+	return (node->lis);
+}
 
-}*/
+bool	is_non_null(void *ptr)
+{
+	return (ptr != 0);
+}
 
+/*
+t_pair	get_best_pair(t_stack **stacks,
+					bool (*is_pushable)(t_stack *), 
+					t_stack *(*find)(t_stack *, unsigned int)
+					bool from)
+{
+	t_stack			*it;
+	void			*end;
+	t_pair			best;
+	t_pair			tmp;
+	u_int8_t		f_dir;
+	unsigned int	cost;
+
+	cost = (unsigned int)-1;
+	it = stacks[FROM];
+
+	while (it != end || cost == (unsigned int)-1)
+	{
+		if (is_pushable(it))
+		{
+			tmp = get_pair(stacks, it
+		}
+		it = it->next;
+	}
+}
+*/
 void	init_stack_b(t_stack *stacks[2], int size)
 {
 	put_first_elem(stacks, size);
@@ -350,10 +388,10 @@ int	main(int ac, char **av)
 
 	t_pair	pair;
 	u_int8_t dir;
-	get_pair(stacks, stacks[stack_b], pair, smallest_bigger);
+	pair = get_pair(stacks, stacks[stack_b], smallest_bigger, FROM_B);
 	
 //	ft_printf("value: %i\tcost_up: %u\tcost_down: %u\tdirection: %s\n", target.node->value, target.cost_up, target.cost_down, (char *[]){"up", "down"}[target.direction]);
-	ft_printf("%i est lie a %i et ils coutent %u\n", pair[stack_b].node->value, pair[stack_a].node->value, pair_cost(pair, &dir));
+	ft_printf("%i est lie a %i et ils coutent %u\n", pair.stack_b.node->value, pair.stack_a.node->value, pair_cost(pair, &dir));
 	print_stacks_side_by_side(stacks[stack_a], stacks[stack_b]);
 	free(garbage);
 	return (0);

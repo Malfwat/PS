@@ -7,6 +7,8 @@
 # define UP 1
 # define DOWN 2
 # define SEPARATE 3
+# define FROM_A 0
+# define FROM_B 1
 
 enum e_stack
 {
@@ -50,6 +52,10 @@ typedef struct s_target
 	enum e_forward	direction;
 }t_target;
 
-typedef t_target t_pair[2];
+typedef struct s_pair
+{
+	t_target	stack_a;
+	t_target	stack_b;
+}	t_pair;
 
 #endif // PS_STRUCT_H
