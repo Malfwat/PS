@@ -149,6 +149,34 @@ unsigned int	get_position(t_stack *head, t_stack *node)
 	return (pos);
 }
 
+
+t_stack	*biggest_smaller(t_stack *stack, unsigned int index)
+{
+	int	go;
+	t_stack	*node;
+	void	*end;
+
+	go = 1;
+	end = stack;
+	node = NULL;
+	while (stack != end || go--)
+	{
+		if (stack->index < index && (!node || stack->index > node->index))
+			node = stack;
+		stack = stack->next;
+	}
+	if (node)
+		return (node);
+	go = 1;
+	while (stack != end || go--)
+	{
+		if (!node || node->index < stack->index)
+			node = stack;
+		stack = stack->next;
+	}
+	return (node);
+}
+
 t_stack	*smallest_bigger(t_stack *stack, unsigned int index)
 {
 	int	go;
@@ -299,6 +327,8 @@ void	put_first_elem(t_stack *stacks[2], int size)
 	int			i;
 
 	i = 0;
+	if (!size)
+		return ;
 	while (i < size)
 	{
 		if (stacks[stack_a][i].lis == 0)
@@ -323,9 +353,9 @@ void	put_first_elem(t_stack *stacks[2], int size)
 	p_stack(stacks, stacks + 1, push_to_b);
 }
 
-bool	is_lis(t_stack *node)
+bool	is_not_lis(t_stack *node)
 {
-	return (node->lis);
+	return (!node->lis);
 }
 
 bool	is_non_null(void *ptr)
@@ -333,42 +363,81 @@ bool	is_non_null(void *ptr)
 	return (ptr != 0);
 }
 
-/*
-t_pair	get_best_pair(t_stack **stacks,
-					bool (*is_pushable)(t_stack *), 
-					t_stack *(*find)(t_stack *, unsigned int)
+
+t_pair	get_best_pair(t_stack *stacks[2], \
+					bool (*is_pushable)(t_stack *), \
+					t_stack *(*find)(t_stack *, unsigned int), \
 					bool from)
 {
 	t_stack			*it;
 	void			*end;
 	t_pair			best;
 	t_pair			tmp;
-	u_int8_t		f_dir;
 	unsigned int	cost;
 
 	cost = (unsigned int)-1;
-	it = stacks[FROM];
+	it = stacks[from];
 
+	end = it;
 	while (it != end || cost == (unsigned int)-1)
 	{
 		if (is_pushable(it))
 		{
-			tmp = get_pair(stacks, it
+			tmp = get_pair(stacks, it, find, from);
+			if (pair_cost(tmp, &tmp.dir) < cost)
+			{
+				best = tmp;
+				cost = pair_cost(best, &best.dir);
+			}
 		}
 		it = it->next;
 	}
+	return (best);
 }
-*/
+
+void	put_to_top(t_stack *stacks[2], t_pair pair)
+{
+	while (pair.stack_a.node != stacks[stack_a])
+	{
+		if (pair.stack_a.direction == up)
+			rotate(stacks, stacks + 1, stack_a);
+		else
+			rrotate(stacks, stacks + 1, stack_a);
+	}
+	while (pair.stack_b.node != stacks[stack_b])
+	{
+		if (pair.stack_b.direction == up)
+			rotate(stacks, stacks + 1, stack_b);
+		else
+			rrotate(stacks, stacks + 1, stack_b);
+	}
+}
+
+void	join_pair(t_stack *stacks[2], t_pair pair, u_int8_t dir)
+{
+	if (dir == up)
+	{
+		while (stacks[stack_a] != pair.stack_a.node && stacks[stack_b] != pair.stack_b.node)
+			rotate(stacks, stacks + 1, both);
+	}
+	else if (dir == down)
+	{
+		while (stacks[stack_a] != pair.stack_a.node && stacks[stack_b] != pair.stack_b.node)
+			rrotate(stacks, stacks + 1, both);
+	}
+	put_to_top(stacks, pair);
+}
+
 void	init_stack_b(t_stack *stacks[2], int size)
 {
-	put_first_elem(stacks, size);
-	/*
-	while (!is_all_lis(stacks[stack_a])
-	{
+	t_pair	pair;
 
-		tmp = 
-		it = it->next;
-	}*/
+	put_first_elem(stacks, size);
+	while (!is_all_lis(stacks[stack_a]))
+	{
+		pair = get_best_pair(stacks, is_not_lis, biggest_smaller, FROM_A);
+		join_pair(stacks, pair, pair.dir);
+	}
 }
 
 int	main(int ac, char **av)
@@ -384,6 +453,7 @@ int	main(int ac, char **av)
 	if (!stacks[stack_a])
 		return (ft_putendl_fd("Something wrong with your input", 2), 1);
 	garbage = *stacks;
+	stacks[stack_b] = 0;
 	init_stack_b(stacks, ac - 1);
 
 	t_pair	pair;

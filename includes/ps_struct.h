@@ -2,6 +2,7 @@
 # define PS_STRUCT_H
 
 # include <stdbool.h>
+# include <stdlib.h>
 
 # define MAX_LIS 2048
 # define UP 1
@@ -56,6 +57,7 @@ typedef struct s_pair
 {
 	t_target	stack_a;
 	t_target	stack_b;
+	u_int8_t	dir;
 }	t_pair;
 
 #endif // PS_STRUCT_H
