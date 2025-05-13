@@ -276,8 +276,7 @@ unsigned int pair_cost(t_pair pair, u_int8_t *final_direction)
 	unsigned int	cost;
 	unsigned int	tmp;
 
-	tmp = biggest_cost(pair.stack_a.cost_up, pair.stack_b.cost_up);
-	cost = tmp;
+	cost = biggest_cost(pair.stack_a.cost_up, pair.stack_b.cost_up);
 	*final_direction = UP;
 	tmp = biggest_cost(pair.stack_a.cost_down, pair.stack_b.cost_down);
 	if (cost > tmp)
@@ -316,10 +315,6 @@ bool	is_all_lis(t_stack *head)
 	}
 	return (true);
 }
-
-//	find best to b
-//	put to top
-//	pb
 
 void	put_first_elem(t_stack *stacks[2], int size)
 {
@@ -415,12 +410,12 @@ void	put_to_top(t_stack *stacks[2], t_pair pair)
 
 void	join_pair(t_stack *stacks[2], t_pair pair, u_int8_t dir, enum e_push push_to)
 {
-	if (dir == up)
+	if (dir == UP)
 	{
 		while (stacks[stack_a] != pair.stack_a.node && stacks[stack_b] != pair.stack_b.node)
 			rotate(stacks, stacks + 1, both);
 	}
-	else if (dir == down)
+	else if (dir == DOWN)
 	{
 		while (stacks[stack_a] != pair.stack_a.node && stacks[stack_b] != pair.stack_b.node)
 			rrotate(stacks, stacks + 1, both);
@@ -430,8 +425,13 @@ void	join_pair(t_stack *stacks[2], t_pair pair, u_int8_t dir, enum e_push push_t
 		p_stack(stacks + 1, stacks, push_to);
 	else
 	{
-		rotate(stacks, stacks + 1, stack_b);
-		p_stack(stacks, stacks + 1, push_to);
+		if (stacks[stack_b]->next != stacks[stack_b])
+		{
+			rotate(stacks, stacks + 1, stack_b);
+			p_stack(stacks, stacks + 1, push_to);
+		}
+		else
+			p_stack(stacks, stacks + 1, push_to);
 	}
 }
 
@@ -442,9 +442,33 @@ void	init_stack_b(t_stack *stacks[2], int size)
 	put_first_elem(stacks, size);
 	while (!is_all_lis(stacks[stack_a]))
 	{
-		pair = get_best_pair(stacks, is_not_lis, biggest_smaller, FROM_A);
+		pair = get_best_pair(stacks, is_not_lis, smallest_bigger, FROM_A);
 		join_pair(stacks, pair, pair.dir, push_to_b);
 	}
+}
+
+void	resolve(t_stack *stacks[2])
+{
+	t_pair		pair;
+	t_target	first;
+	t_stack		*tmp;
+	void (*mv)(t_stack **, t_stack **, enum e_stack);
+
+	while (stacks[stack_b])
+	{
+		pair = get_best_pair(stacks, is_not_lis, smallest_bigger, FROM_B);
+		join_pair(stacks, pair, pair.dir, push_to_a);
+	}
+	tmp = stacks[stack_a];
+	while (tmp->index != 0)
+		tmp = tmp->next;
+	first = get_cost(stacks[stack_a], tmp);
+	if (first.direction == up)
+		mv = rotate;
+	else 
+		mv = rrotate;
+	while (stacks[stack_a]->index != 0)
+		mv(stacks, stacks + 1, stack_a);
 }
 
 int	main(int ac, char **av)
@@ -462,13 +486,7 @@ int	main(int ac, char **av)
 	garbage = *stacks;
 	stacks[stack_b] = 0;
 	init_stack_b(stacks, ac - 1);
-
-	t_pair	pair;
-	u_int8_t dir;
-	pair = get_pair(stacks, stacks[stack_b], smallest_bigger, FROM_B);
-	
-//	ft_printf("value: %i\tcost_up: %u\tcost_down: %u\tdirection: %s\n", target.node->value, target.cost_up, target.cost_down, (char *[]){"up", "down"}[target.direction]);
-	ft_printf("%i est lie a %i et ils coutent %u\n", pair.stack_b.node->value, pair.stack_a.node->value, pair_cost(pair, &dir));
+	resolve(stacks);
 	print_stacks_side_by_side(stacks[stack_a], stacks[stack_b]);
 	free(garbage);
 	return (0);

@@ -1,4 +1,5 @@
 #include "ps_struct.h"
+#include "ps.h"
 #include "libftprintf.h"
 
 void	swap(t_stack *a, t_stack *b, t_stack **head)
@@ -8,6 +9,8 @@ void	swap(t_stack *a, t_stack *b, t_stack **head)
 
 	if (a == *head)
 		*head = b;
+	if (stack_size(*head) == 2)
+		return ;
 	next = b->next;
 	prev = a->prev;
 	a->prev->next = b;
