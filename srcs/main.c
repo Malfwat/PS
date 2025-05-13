@@ -353,7 +353,7 @@ bool	is_not_lis(t_stack *node)
 	return (!node->lis);
 }
 
-bool	is_non_null(void *ptr)
+bool	is_non_null(t_stack *ptr)
 {
 	return (ptr != 0);
 }
@@ -435,15 +435,22 @@ void	join_pair(t_stack *stacks[2], t_pair pair, u_int8_t dir, enum e_push push_t
 	}
 }
 
-void	init_stack_b(t_stack *stacks[2], int size)
+void	init_stack_b(t_stack *stacks[2], unsigned int size)
 {
-	t_pair	pair;
-
 	put_first_elem(stacks, size);
 	while (!is_all_lis(stacks[stack_a]))
 	{
-		pair = get_best_pair(stacks, is_not_lis, smallest_bigger, FROM_A);
-		join_pair(stacks, pair, pair.dir, push_to_b);
+
+		if (!stacks[stack_a]->lis)
+		{
+			p_stack(stacks, stacks + 1, push_to_b);
+			if (stacks[stack_b]->index < size / 2)
+				rotate(stacks, stacks + 1, stack_b);
+		}
+		else
+			rotate(stacks, stacks + 1, stack_a);
+//		pair = get_best_pair(stacks, is_not_lis, smallest_bigger, FROM_A);
+//		join_pair(stacks, pair, pair.dir, push_to_b);
 	}
 }
 
@@ -456,7 +463,7 @@ void	resolve(t_stack *stacks[2])
 
 	while (stacks[stack_b])
 	{
-		pair = get_best_pair(stacks, is_not_lis, smallest_bigger, FROM_B);
+		pair = get_best_pair(stacks, is_non_null, smallest_bigger, FROM_B);
 		join_pair(stacks, pair, pair.dir, push_to_a);
 	}
 	tmp = stacks[stack_a];
@@ -487,7 +494,7 @@ int	main(int ac, char **av)
 	stacks[stack_b] = 0;
 	init_stack_b(stacks, ac - 1);
 	resolve(stacks);
-	print_stacks_side_by_side(stacks[stack_a], stacks[stack_b]);
+//	print_stacks_side_by_side(stacks[stack_a], stacks[stack_b]);
 	free(garbage);
 	return (0);
 }
