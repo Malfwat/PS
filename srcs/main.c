@@ -413,7 +413,7 @@ void	put_to_top(t_stack *stacks[2], t_pair pair)
 	}
 }
 
-void	join_pair(t_stack *stacks[2], t_pair pair, u_int8_t dir)
+void	join_pair(t_stack *stacks[2], t_pair pair, u_int8_t dir, enum e_push push_to)
 {
 	if (dir == up)
 	{
@@ -426,6 +426,13 @@ void	join_pair(t_stack *stacks[2], t_pair pair, u_int8_t dir)
 			rrotate(stacks, stacks + 1, both);
 	}
 	put_to_top(stacks, pair);
+	if (push_to == push_to_a)
+		p_stack(stacks + 1, stacks, push_to);
+	else
+	{
+		rotate(stacks, stacks + 1, stack_b);
+		p_stack(stacks, stacks + 1, push_to);
+	}
 }
 
 void	init_stack_b(t_stack *stacks[2], int size)
@@ -436,7 +443,7 @@ void	init_stack_b(t_stack *stacks[2], int size)
 	while (!is_all_lis(stacks[stack_a]))
 	{
 		pair = get_best_pair(stacks, is_not_lis, biggest_smaller, FROM_A);
-		join_pair(stacks, pair, pair.dir);
+		join_pair(stacks, pair, pair.dir, push_to_b);
 	}
 }
 
