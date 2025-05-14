@@ -422,17 +422,14 @@ void	join_pair(t_stack *stacks[2], t_pair pair, u_int8_t dir, enum e_push push_t
 	}
 	put_to_top(stacks, pair);
 	if (push_to == push_to_a)
-		p_stack(stacks + 1, stacks, push_to);
-	else
+		return (p_stack(stacks + 1, stacks, push_to));
+	if (stacks[stack_b]->next != stacks[stack_b])
 	{
-		if (stacks[stack_b]->next != stacks[stack_b])
-		{
-			rotate(stacks, stacks + 1, stack_b);
-			p_stack(stacks, stacks + 1, push_to);
-		}
-		else
-			p_stack(stacks, stacks + 1, push_to);
+		rotate(stacks, stacks + 1, stack_b);
+		p_stack(stacks, stacks + 1, push_to);
 	}
+	else
+		p_stack(stacks, stacks + 1, push_to);
 }
 
 void	init_stack_b(t_stack *stacks[2], unsigned int size)
@@ -449,8 +446,6 @@ void	init_stack_b(t_stack *stacks[2], unsigned int size)
 		}
 		else
 			rotate(stacks, stacks + 1, stack_a);
-//		pair = get_best_pair(stacks, is_not_lis, smallest_bigger, FROM_A);
-//		join_pair(stacks, pair, pair.dir, push_to_b);
 	}
 }
 
