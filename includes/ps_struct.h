@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ps_struct.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: malfwa <admoufle@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/14 20:18:39 by malfwa            #+#    #+#             */
+/*   Updated: 2025/05/14 20:19:16 by malfwa           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PS_STRUCT_H
 # define PS_STRUCT_H
 
@@ -51,7 +63,7 @@ typedef struct s_target
 	unsigned int	cost_up;
 	unsigned int	cost_down;
 	enum e_forward	direction;
-}t_target;
+}	t_target;
 
 typedef struct s_pair
 {

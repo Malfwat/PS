@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   push.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: malfwa <admoufle@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/14 20:27:07 by malfwa            #+#    #+#             */
+/*   Updated: 2025/05/14 20:27:17 by malfwa           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ps_struct.h"
 #include "libftprintf.h"
 
@@ -41,7 +53,7 @@ void	push(t_stack **head, t_stack *node)
 
 void	p_stack(t_stack **from, t_stack **to, enum e_push direction)
 {
-	static char *move[2] = {"pa\n", "pb\n"};
+	static char	*move[2] = {"pa\n", "pb\n"};
 
 	if (!*from)
 		return ;
