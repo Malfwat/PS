@@ -82,15 +82,15 @@ void	put_first_elem(t_stack *stacks[2], int size)
 	while (!dir && ++i < size)
 	{
 		if (stacks[stack_a][i].lis == 0)
-			dir = UP;
+			dir = up;
 		else if (stacks[stack_a][size - i - 1].lis == 0)
-			dir = DOWN;
+			dir = down;
 	}
 	while (i-- >= 0)
 	{
-		if (dir == UP)
+		if (dir == up)
 			rotate(stacks, stacks + 1, stack_a);
-		else if (dir == DOWN)
+		else if (dir == down)
 			rrotate(stacks, stacks + 1, stack_a);
 	}
 	p_stack(stacks, stacks + 1, push_to_b);

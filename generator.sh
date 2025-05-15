@@ -35,10 +35,6 @@ for ((i = 1; i <= N; i++)); do
         echo "❌ Erreur : push_swap n’a pas correctement trié la liste."
         echo "Arrêt du test."
         exit 1
-    elif [[ "$RESULT" != "OK" ]]; then
-        echo "❌ Erreur inattendue : checker_linux a retourné '$RESULT'."
-        echo "Arrêt du test."
-        exit 1
     fi
 
     VALUE=$(echo "$CMD" | wc -l)

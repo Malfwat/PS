@@ -17,8 +17,6 @@
 # include <stdlib.h>
 
 # define MAX_LIS 2048
-# define UP 1
-# define DOWN 2
 # define SEPARATE 3
 # define FROM_A 0
 # define FROM_B 1

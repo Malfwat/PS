@@ -53,9 +53,9 @@ void	join_pair(t_stack *s[2], t_pair p, u_int8_t dir, enum e_push p_to)
 	void	(*mv)(t_stack **, t_stack **, enum e_stack);
 
 	mv = NULL;
-	if (dir == UP)
+	if (dir == up)
 		mv = rotate;
-	else if (dir == DOWN)
+	else if (dir == down)
 		mv = rrotate;
 	if (mv)
 		while (s[stack_a] != p.stack_a.node && s[stack_b] != p.stack_b.node)

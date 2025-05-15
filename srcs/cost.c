@@ -33,12 +33,12 @@ unsigned int	pair_cost(t_pair pair, u_int8_t *final_direction)
 	unsigned int	tmp;
 
 	cost = biggest_cost(pair.stack_a.cost_up, pair.stack_b.cost_up);
-	*final_direction = UP;
+	*final_direction = up;
 	tmp = biggest_cost(pair.stack_a.cost_down, pair.stack_b.cost_down);
 	if (cost > tmp)
 	{
 		cost = tmp;
-		*final_direction = DOWN;
+		*final_direction = down;
 	}
 	tmp = min_cost(pair.stack_a) + min_cost(pair.stack_b);
 	if (cost > tmp)

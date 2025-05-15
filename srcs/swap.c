@@ -29,6 +29,7 @@ void	swap(t_stack *a, t_stack *b, t_stack **head)
 	b->next = a;
 	b->prev = prev;
 	a->next = next;
+	a->next->prev = a;
 	a->prev = b;
 }
 
