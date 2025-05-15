@@ -58,13 +58,11 @@ void	make_move(t_stack *stacks[2], char *cmd)
 	else if (!ft_strcmp(cmd, "ss"))
 		s_stack(stacks, stacks + 1, both);
 	else if (!ft_strcmp(cmd, "pa"))
-		p_stack(stacks, stacks + 1, push_to_a);
+		p_stack(stacks + 1, stacks, push_to_a);
 	else if (!ft_strcmp(cmd, "pb"))
 		p_stack(stacks, stacks + 1, push_to_b);
 	else
 		error(stacks);
-	if (!stacks[stack_a])
-		ft_putstr_fd("pb", 2);
 }
 
 #include <fcntl.h>
@@ -83,10 +81,7 @@ int	main(int ac, char **av)
 		return (1);
 	garbage = *stacks;
 	stacks[stack_b] = 0;
-	int fd = open("moves.txt", O_RDONLY);
-	if (fd < 0)
-		return (free(garbage), 1);
-	cmd	= get_next_line(fd);
+	cmd	= get_next_line(0);
 	while (cmd)
 	{
 		len = ft_strlen(cmd);
@@ -94,7 +89,7 @@ int	main(int ac, char **av)
 			cmd[len - 1] = 0;
 		make_move(stacks, cmd);
 		free(cmd);
-		cmd = get_next_line(fd);
+		cmd = get_next_line(0);
 	}
 	if (is_sorted(stacks[stack_a]) && !stacks[stack_b])
 		ft_printf("OK\n");

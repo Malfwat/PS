@@ -44,6 +44,19 @@ bool	fill_data(t_stack **arr, t_stack *stack, char **av, int i)
 	return (true);
 }
 
+int	check_duplicate(t_stack **tab, int size)
+{
+	int	i;
+
+	i = 1;
+	while (i < size)
+	{
+		if (tab[i]->value == tab[i - 1]->value)
+			return (false);
+	}
+	return (true);
+}
+
 t_stack	*init_stack_a(int ac, char **av)
 {
 	t_stack	*stack;
@@ -63,6 +76,8 @@ t_stack	*init_stack_a(int ac, char **av)
 	stack[i - 1].next = stack;
 	stack[0].prev = stack + i - 1;
 	my_qsort(tmp, 0, ac - 2);
+	if (!check_duplicate(tmp, ac - 1))
+		return (free(tmp), free(stack), NULL);
 	i = -1;
 	while (++i < ac - 1)
 		tmp[i]->index = i;

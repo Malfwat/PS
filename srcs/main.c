@@ -50,7 +50,7 @@ int	main(int ac, char **av)
 	if (ac < 2)
 		return (ft_putendl_fd("Gimme some number", 2), 1);
 	stacks[stack_a] = init_stack_a(ac, av);
-	if (!*stacks || is_sorted(stacks[stack_a]))
+	if (!*stacks || stack_size(stacks[stack_a]) == 1 || is_sorted(stacks[stack_a]))
 		return (free(*stacks), 0);
 	if (!stacks[stack_a])
 		return (ft_putendl_fd("Something wrong with your input", 2), 1);
