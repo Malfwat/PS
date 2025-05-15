@@ -14,24 +14,6 @@
 #include "ps.h"
 #include "ps_struct.h"
 
-int	ft_isnumber(char *str)
-{
-	int	i;
-
-	i = 0;
-	if (!str)
-		return (false);
-	if (str[i] == '-' || str[i] == '+')
-		i++;
-	while (str[i])
-	{
-		if (str[i] > '9' || str[i] < '0')
-			return (false);
-		i++;
-	}
-	return (true);
-}
-
 bool	fill_data(t_stack **arr, t_stack *stack, char **av, int i)
 {
 	if (!ft_isnumber(av[i + 1]))
@@ -53,6 +35,7 @@ int	check_duplicate(t_stack **tab, int size)
 	{
 		if (tab[i]->value == tab[i - 1]->value)
 			return (false);
+		i++;
 	}
 	return (true);
 }
@@ -72,12 +55,12 @@ t_stack	*init_stack_a(int ac, char **av)
 	i = 0;
 	while (i < ac - 1)
 		if (!fill_data(tmp, stack, av, i++))
-			return (free(stack), free(tmp), NULL);
+			return (ft_putendl_fd("Error", 2), free(stack), free(tmp), NULL);
 	stack[i - 1].next = stack;
 	stack[0].prev = stack + i - 1;
 	my_qsort(tmp, 0, ac - 2);
 	if (!check_duplicate(tmp, ac - 1))
-		return (free(tmp), free(stack), NULL);
+		return (ft_putendl_fd("Error", 2), free(tmp), free(stack), NULL);
 	i = -1;
 	while (++i < ac - 1)
 		tmp[i]->index = i;

@@ -13,6 +13,7 @@ SRC_M	=	main.c	\
 SRC		=	utils.c	\
 			lis.c	\
 			my_qsort_stack.c\
+			nb_parsing.c	\
 			init.c
 
 SRC_B	=	gnl/get_next_line.c	\

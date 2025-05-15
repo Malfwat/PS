@@ -2,7 +2,7 @@
 
 # Vérifie qu’un argument est fourni
 if [ -z "$1" ]; then
-    echo "Usage: $0 <nombre_de_tests>"
+    echo "Usage: $0 <nombre_de_tests> [taille_de_la_pile (défaut: 50)]"
     exit 1
 fi
 
@@ -13,21 +13,31 @@ if ! [[ "$1" =~ ^[0-9]+$ && "$1" -gt 0 ]]; then
 fi
 
 N=$1
+PILE_SIZE=${2:-50} # Par défaut 50 si pas précisé
+MAX_VAL=700        # Plage de nombres aléatoires : 0 à MAX_VAL
+
+# Vérifie que la taille de la pile est un entier positif <= MAX_VAL + 1
+if ! [[ "$PILE_SIZE" =~ ^[0-9]+$ && "$PILE_SIZE" -gt 0 && "$PILE_SIZE" -le $((MAX_VAL + 1)) ]]; then
+    echo "Erreur : la taille de la pile doit être un entier entre 1 et $((MAX_VAL + 1))."
+    exit 1
+fi
+
 total=0
 tests_done=0
 
 make all
 
 for ((i = 1; i <= N; i++)); do
-    echo "===== Test $i/$N ====="
+    echo "===== Test $i/$N (taille: $PILE_SIZE) ====="
 
-    # Génère 500 nombres aléatoires uniques entre 0 et 700
-    ARG=$(shuf -i 0-700 -n 50 | tr '\n' ' ')
-	echo $ARG > tmp
+    # Génère des nombres aléatoires uniques
+    ARG=$(shuf -i 0-$MAX_VAL -n $PILE_SIZE | tr '\n' ' ')
+    echo $ARG > tmp
+
     # Exécute push_swap
     CMD=$(./push_swap $ARG)
 
-    # Vérifie avec checker_linux
+    # Vérifie avec checker
     RESULTT=$(echo "$CMD" | ./checker $ARG)
     echo "$RESULTT <- checker"
 

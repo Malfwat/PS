@@ -44,6 +44,22 @@ void	initialize_tabs(int arr[2][MAX_LIS], int size)
 	}
 }
 
+bool	is_all_lis(t_stack *head)
+{
+	int		go;
+	void	*end;
+
+	go = 1;
+	end = head;
+	while (head != end || go--)
+	{
+		if (!head->lis)
+			return (false);
+		head = head->next;
+	}
+	return (true);
+}
+
 void	lis(t_stack *tab, int size)
 {
 	int	arr[2][MAX_LIS];

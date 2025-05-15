@@ -16,16 +16,21 @@
 
 void	sort_three(t_stack **s)
 {
-	if ((*s)->index > (*s)->next->index && (*s)->index < (*s)->prev->index)
+	t_stack	*n;
+	t_stack	*p;
+
+	n = (*s)->next;
+	p = (*s)->prev;
+	if ((*s)->index > n->index && (*s)->index < p->index)
 		s_stack(s, 0, stack_a);
-	else if ((*s)->index < (*s)->next->index && (*s)->index > (*s)->prev->index)
+	else if ((*s)->index < n->index && (*s)->index > p->index)
 		rrotate(s, 0, stack_a);
-	else if ((*s)->index < (*s)->next->index && (*s)->next->index > (*s)->prev->index)
+	else if ((*s)->index < n->index && n->index > p->index)
 	{
 		s_stack(s, 0, stack_a);
 		rotate(s, 0, stack_a);
 	}
-	else if ((*s)->prev->index < (*s)->next->index)
+	else if (p->index < n->index)
 	{
 		s_stack(s, 0, stack_a);
 		rrotate(s, 0, stack_a);
@@ -42,29 +47,37 @@ void	sort_five(t_stack *stacks[2])
 	resolve(stacks);
 }
 
+void	sorting(t_stack *stacks[2], int size)
+{
+	if (size == 3)
+		sort_three(stacks);
+	else if (size == 5)
+		sort_five(stacks);
+	else
+	{
+		init_stack_b(stacks, size);
+		resolve(stacks);
+	}
+}
+
 int	main(int ac, char **av)
 {
 	t_stack	*stacks[2];
 	void	*garbage;
 
 	if (ac < 2)
-		return (ft_putendl_fd("Gimme some number", 2), 1);
+		return (0);
+	if (ac == 2)
+	{
+		if (!ft_isnumber(av[1]))
+			ft_putendl_fd("Error", 2);
+		return (0);
+	}
 	stacks[stack_a] = init_stack_a(ac, av);
-	if (!*stacks || stack_size(stacks[stack_a]) == 1 || is_sorted(stacks[stack_a]))
+	if (!*stacks || is_sorted(stacks[stack_a]))
 		return (free(*stacks), 0);
-	if (!stacks[stack_a])
-		return (ft_putendl_fd("Something wrong with your input", 2), 1);
 	garbage = *stacks;
 	stacks[stack_b] = 0;
-	if (ac - 1 == 3)
-		sort_three(stacks);
-	else if (ac - 1 == 5)
-		sort_five(stacks);
-	else
-	{
-		init_stack_b(stacks, ac - 1);
-		resolve(stacks);
-	}
-	free(garbage);
-	return (0);
+	sorting(stacks, ac - 1);
+	return (free(garbage), 0);
 }

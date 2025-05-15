@@ -15,22 +15,6 @@
 #include "ps_struct.h"
 #include "get_next_line.h"
 
-int	ft_strcmp(char *a, char *b)
-{
-	int	i;
-
-	if (!a && !b)
-		return (0);
-	if (!a)
-		return (*b);
-	if (!b)
-		return (*a);
-	i = 0;
-	while (a[i] && a[i] == b[i])
-		i++;
-	return (a[i] - b[i]);
-}
-
 void	error(t_stack *stacks[2])
 {
 	ft_printf("Probleme\n");
@@ -65,8 +49,6 @@ void	make_move(t_stack *stacks[2], char *cmd)
 		error(stacks);
 }
 
-#include <fcntl.h>
-
 int	main(int ac, char **av)
 {
 	t_stack	*stacks[2];
@@ -76,12 +58,12 @@ int	main(int ac, char **av)
 
 	if (ac == 1)
 		return (0);
-	stacks[stack_a]	= init_stack_a(ac, av);
+	stacks[stack_a] = init_stack_a(ac, av);
 	if (!*stacks)
 		return (1);
 	garbage = *stacks;
 	stacks[stack_b] = 0;
-	cmd	= get_next_line(0);
+	cmd = get_next_line(0);
 	while (cmd)
 	{
 		len = ft_strlen(cmd);
@@ -91,9 +73,7 @@ int	main(int ac, char **av)
 		free(cmd);
 		cmd = get_next_line(0);
 	}
-	if (is_sorted(stacks[stack_a]) && !stacks[stack_b])
-		ft_printf("OK\n");
-	else
-		ft_printf("KO\n");
-	return (free(garbage), 0);
+	if ((ac - 1 == 1 || is_sorted(stacks[stack_a])) && !stacks[stack_b])
+		return (ft_printf("OK\n"), free(garbage), 0);
+	return (ft_printf("KO\n"), free(garbage), 0);
 }

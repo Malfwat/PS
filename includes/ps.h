@@ -24,7 +24,9 @@ unsigned int	stack_size(t_stack *head);
 
 unsigned int	get_position(t_stack *head, t_stack *node);
 void			put_to_top(t_stack *stacks[2], t_pair pair);
+int				ft_strcmp(char *a, char *b);
 
+bool			ft_isnumber(char *str);
 bool			is_sorted(t_stack *stack);
 void			join_pair(t_stack *stacks[2], t_pair pair, u_int8_t dir,\
 		enum e_push push_to);

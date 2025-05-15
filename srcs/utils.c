@@ -14,6 +14,22 @@
 #include "ps_struct.h"
 #include "ps.h"
 
+int	ft_strcmp(char *a, char *b)
+{
+	int	i;
+
+	if (!a && !b)
+		return (0);
+	if (!a)
+		return (*b);
+	if (!b)
+		return (*a);
+	i = 0;
+	while (a[i] && a[i] == b[i])
+		i++;
+	return (a[i] - b[i]);
+}
+
 unsigned int	stack_size(t_stack *head)
 {
 	unsigned int	len;
@@ -84,22 +100,6 @@ bool	is_sorted(t_stack *stack)
 			return (false);
 		tmp = stack->index;
 		stack = stack->next;
-	}
-	return (true);
-}
-
-bool	is_all_lis(t_stack *head)
-{
-	int		go;
-	void	*end;
-
-	go = 1;
-	end = head;
-	while (head != end || go--)
-	{
-		if (!head->lis)
-			return (false);
-		head = head->next;
 	}
 	return (true);
 }
