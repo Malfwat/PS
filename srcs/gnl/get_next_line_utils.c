@@ -6,7 +6,7 @@
 /*   By: admoufle <admoufle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 07:46:24 by malfwa            #+#    #+#             */
-/*   Updated: 2025/04/27 14:46:29 by admoufle         ###   ########.fr       */
+/*   Updated: 2025/05/15 18:28:33 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,20 +36,6 @@ void	free_lst(t_read *head)
 		free(tmp->ptr);
 		free(tmp);
 	}
-}
-
-char	*ft_strchr(char *str, char c)
-{
-	int	i;
-
-	i = 0;
-	while (str && str[i])
-	{
-		if (str[i] == c)
-			return (str + i);
-		i++;
-	}
-	return (NULL);
 }
 
 char	*ft_substring(char *str, int len)

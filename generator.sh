@@ -22,12 +22,15 @@ for ((i = 1; i <= N; i++)); do
     echo "===== Test $i/$N ====="
 
     # Génère 500 nombres aléatoires uniques entre 0 et 700
-    ARG=$(shuf -i 0-700 -n 500 | tr '\n' ' ')
+    ARG=$(shuf -i 0-700 -n 100 | tr '\n' ' ')
 	echo $ARG > tmp
     # Exécute push_swap
     CMD=$(./push_swap $ARG)
 
     # Vérifie avec checker_linux
+    RESULTT=$(echo "$CMD" | ./checker $ARG)
+    echo "$RESULTT <- checker"
+
     RESULT=$(echo "$CMD" | ./checker_linux $ARG)
     echo "$RESULT <- checker_linux"
 
