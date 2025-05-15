@@ -14,6 +14,34 @@
 #include "ps_struct.h"
 #include "ps.h"
 
+void	sort_three(t_stack **s)
+{
+	if ((*s)->index > (*s)->next->index && (*s)->index < (*s)->prev->index)
+		s_stack(s, 0, stack_a);
+	else if ((*s)->index < (*s)->next->index && (*s)->index > (*s)->prev->index)
+		rrotate(s, 0, stack_a);
+	else if ((*s)->index < (*s)->next->index && (*s)->next->index > (*s)->prev->index)
+	{
+		s_stack(s, 0, stack_a);
+		rotate(s, 0, stack_a);
+	}
+	else if ((*s)->prev->index < (*s)->next->index)
+	{
+		s_stack(s, 0, stack_a);
+		rrotate(s, 0, stack_a);
+	}
+	else
+		rotate(s, 0, stack_a);
+}
+
+void	sort_five(t_stack *stacks[2])
+{
+	p_stack(stacks, stacks + 1, push_to_b);
+	p_stack(stacks, stacks + 1, push_to_b);
+	sort_three(stacks);
+	resolve(stacks);
+}
+
 int	main(int ac, char **av)
 {
 	t_stack	*stacks[2];
@@ -28,8 +56,15 @@ int	main(int ac, char **av)
 		return (ft_putendl_fd("Something wrong with your input", 2), 1);
 	garbage = *stacks;
 	stacks[stack_b] = 0;
-	init_stack_b(stacks, ac - 1);
-	resolve(stacks);
+	if (ac - 1 == 3)
+		sort_three(stacks);
+	else if (ac - 1 == 5)
+		sort_five(stacks);
+	else
+	{
+		init_stack_b(stacks, ac - 1);
+		resolve(stacks);
+	}
 	free(garbage);
 	return (0);
 }

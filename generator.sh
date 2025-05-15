@@ -23,7 +23,7 @@ for ((i = 1; i <= N; i++)); do
 
     # Génère 500 nombres aléatoires uniques entre 0 et 700
     ARG=$(shuf -i 0-700 -n 500 | tr '\n' ' ')
-
+	echo $ARG > tmp
     # Exécute push_swap
     CMD=$(./push_swap $ARG)
 

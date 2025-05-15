@@ -37,14 +37,11 @@ t_pair	get_best_pair(t_stack *stacks[2])
 	end = it;
 	while (it != end || cost == (unsigned int)-1)
 	{
-		if (it)
+		tmp = get_pair(stacks, it);
+		if (pair_cost(tmp, &tmp.dir) < cost)
 		{
-			tmp = get_pair(stacks, it);
-			if (pair_cost(tmp, &tmp.dir) < cost)
-			{
-				best = tmp;
-				cost = pair_cost(best, &best.dir);
-			}
+			best = tmp;
+			cost = pair_cost(best, &best.dir);
 		}
 		it = it->next;
 	}
@@ -64,13 +61,5 @@ void	join_pair(t_stack *s[2], t_pair p, u_int8_t dir, enum e_push p_to)
 		while (s[stack_a] != p.stack_a.node && s[stack_b] != p.stack_b.node)
 			mv(s, s + 1, both);
 	put_to_top(s, p);
-	if (p_to == push_to_a)
-		return (p_stack(s + 1, s, p_to));
-	if (s[stack_b]->next != s[stack_b])
-	{
-		rotate(s, s + 1, stack_b);
-		p_stack(s, s + 1, p_to);
-	}
-	else
-		p_stack(s, s + 1, p_to);
+	return (p_stack(s + 1, s, p_to));
 }
