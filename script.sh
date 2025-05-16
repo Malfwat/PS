@@ -32,7 +32,6 @@ for ((i = 1; i <= N; i++)); do
 
     # Génère des nombres aléatoires uniques
     ARG=$(shuf -i 0-$MAX_VAL -n $PILE_SIZE | tr '\n' ' ')
-    echo $ARG > tmp
 
     # Exécute push_swap
     CMD=$(./push_swap $ARG)

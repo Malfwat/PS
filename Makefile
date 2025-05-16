@@ -73,6 +73,9 @@ fclean:	clean
 
 re: fclean all
 
+tester:	script.sh
+	wget https://github.com/Malfwat/PS/blob/main/script.sh
+
 .PHONY: re all fclean clean bonus
 
 -include $(OBJ:.o=.d)
