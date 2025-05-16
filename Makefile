@@ -69,7 +69,7 @@ clean:
 
 fclean:	clean
 	make fclean -C printf
-	rm -rf $(NAME)
+	rm -rf $(NAME) $(NAME_B)
 
 re: fclean all
 

@@ -10,43 +10,43 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libftprintf.h"
 #include "ps.h"
 #include "ps_struct.h"
 #include "get_next_line.h"
 
-void	error(t_stack *stacks[2])
+void	error(void *garbage)
 {
-	ft_printf("Probleme\n");
-	(void)stacks;
+	ft_putendl_fd("Error", 2);
+	free(garbage);
+	exit(1);
 }
 
-void	make_move(t_stack *stacks[2], char *cmd)
+void	make_move(t_stack *stacks[2], char *cmd, void *garbage)
 {
-	if (!ft_strcmp(cmd, "ra"))
+	if (!ft_strcmp(cmd, "ra\n"))
 		rotate(stacks, stacks + 1, stack_a);
-	else if (!ft_strcmp(cmd, "rb"))
+	else if (!ft_strcmp(cmd, "rb\n"))
 		rotate(stacks, stacks + 1, stack_b);
-	else if (!ft_strcmp(cmd, "rr"))
+	else if (!ft_strcmp(cmd, "rr\n"))
 		rotate(stacks, stacks + 1, both);
-	else if (!ft_strcmp(cmd, "rra"))
+	else if (!ft_strcmp(cmd, "rra\n"))
 		rrotate(stacks, stacks + 1, stack_a);
-	else if (!ft_strcmp(cmd, "rrb"))
+	else if (!ft_strcmp(cmd, "rrb\n"))
 		rrotate(stacks, stacks + 1, stack_b);
-	else if (!ft_strcmp(cmd, "rrr"))
+	else if (!ft_strcmp(cmd, "rrr\n"))
 		rrotate(stacks, stacks + 1, both);
-	else if (!ft_strcmp(cmd, "sa"))
+	else if (!ft_strcmp(cmd, "sa\n"))
 		s_stack(stacks, stacks + 1, stack_a);
-	else if (!ft_strcmp(cmd, "sb"))
+	else if (!ft_strcmp(cmd, "sb\n"))
 		s_stack(stacks, stacks + 1, stack_b);
-	else if (!ft_strcmp(cmd, "ss"))
+	else if (!ft_strcmp(cmd, "ss\n"))
 		s_stack(stacks, stacks + 1, both);
-	else if (!ft_strcmp(cmd, "pa"))
+	else if (!ft_strcmp(cmd, "pa\n"))
 		p_stack(stacks + 1, stacks, push_to_a);
-	else if (!ft_strcmp(cmd, "pb"))
+	else if (!ft_strcmp(cmd, "pb\n"))
 		p_stack(stacks, stacks + 1, push_to_b);
 	else
-		error(stacks);
+		error(garbage);
 }
 
 int	main(int ac, char **av)
@@ -54,10 +54,9 @@ int	main(int ac, char **av)
 	t_stack	*stacks[2];
 	void	*garbage;
 	char	*cmd;
-	int		len;
 
 	if (ac == 1)
-		return (0);
+		return (1);
 	stacks[stack_a] = init_stack_a(ac, av);
 	if (!*stacks)
 		return (1);
@@ -66,10 +65,7 @@ int	main(int ac, char **av)
 	cmd = get_next_line(0);
 	while (cmd)
 	{
-		len = ft_strlen(cmd);
-		if (len && cmd[len - 1] == '\n')
-			cmd[len - 1] = 0;
-		make_move(stacks, cmd);
+		make_move(stacks, cmd, garbage);
 		free(cmd);
 		cmd = get_next_line(0);
 	}
